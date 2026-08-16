@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yang Tian (田阳)</title>
+<meta name="description" content="Yang Tian (田阳) — Ph.D. candidate in Artificial Intelligence at Shandong University. Multimodal retrieval agents, multimodal RAG, and large-scale approximate nearest neighbor search.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+<style>
+  :root {
+    --bg: #f7f9fb;
+    --surface: #ffffff;
+    --text: #1c2733;
+    --muted: #5b6b7b;
+    --accent: #1f6fb2;
+    --accent-soft: #e8f1f9;
+    --border: #e2e8ee;
+    --badge-bg: #eef4ea;
+    --badge-text: #3d6b2e;
+    --venue-text: #185d96;
+    --oral-bg: #f9e9e2;
+    --oral-text: #a3401f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #10161d;
+      --surface: #171f28;
+      --text: #dbe4ec;
+      --muted: #8fa1b1;
+      --accent: #6aacdf;
+      --accent-soft: #1c2c3b;
+      --border: #2a3542;
+      --badge-bg: #1e2c1a;
+      --badge-text: #a4cf90;
+      --venue-text: #6aacdf;
+      --oral-bg: #3b2118;
+      --oral-text: #f0a284;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial,
+      "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.65;
+    margin: 0;
+    font-size: 15.5px;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .page { grid-template-columns: 1fr; gap: 24px; }
+    .sidebar { position: static; }
+  }
+
+  /* ── sidebar ── */
+  .sidebar {
+    position: sticky;
+    top: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 22px;
+    text-align: center;
+  }
+  .sidebar img.avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    max-width: 100%;
+  }
+  .sidebar h1 {
+    font-size: 21px;
+    margin: 14px 0 2px;
+    text-wrap: balance;
+  }
+  .sidebar .role { color: var(--muted); font-size: 13.5px; margin: 0 0 2px; }
+  .sidebar .affil { color: var(--muted); font-size: 13.5px; margin: 0; }
+  .sidebar .links {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 13.5px;
+    text-align: left;
+  }
+  .sidebar .links span.ico { display: inline-block; width: 1.5em; }
+
+  /* ── main ── */
+  main { min-width: 0; }
+  section { margin-bottom: 40px; }
+  section h2 {
+    font-size: 19px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .about p { max-width: 68ch; margin: 0 0 10px; }
+
+  /* news */
+  .news { list-style: none; margin: 0; padding: 0; }
+  .news li {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 14px;
+    padding: 5px 0;
+  }
+  .news .date {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* publications */
+  .pub {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 620px) { .pub { grid-template-columns: 1fr; } }
+  img.teaser-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    padding: 4px;
+  }
+  .pub img.teaser-img { width: 100%; }
+  .pub .venue {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--venue-text);
+    border-radius: 5px;
+    padding: 1px 9px;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .pub .venue.preprint { background: var(--badge-bg); color: var(--badge-text); }
+  .pub .venue.oral { background: var(--oral-bg); color: var(--oral-text); }
+  .pub h3 { margin: 0 0 4px; font-size: 15.5px; line-height: 1.45; }
+  .pub .authors { font-size: 14px; color: var(--muted); margin: 0 0 6px; }
+  .pub .authors b { color: var(--text); }
+  .pub .plinks { font-size: 13.5px; }
+  .pub details { margin-top: 6px; font-size: 13.5px; }
+  .pub details summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+  .pub details p { color: var(--muted); margin: 6px 0 0; max-width: 75ch; }
+  .subhead {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 22px 0 10px;
+  }
+
+  /* industry */
+  .industry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .industry h3 { margin: 0 0 10px; font-size: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+  .chip {
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    border-radius: 8px;
+    padding: 3px 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .industry .irow {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+  }
+  @media (max-width: 620px) { .industry .irow { grid-template-columns: 1fr; } }
+  .industry .irow img.teaser-img { width: 100%; }
+  .industry p { max-width: 72ch; margin: 8px 0; }
+
+  /* dated lists (honors, education, experience) */
+  .dated { list-style: none; margin: 0; padding: 0; }
+  .dated li {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 14px;
+    padding: 5px 0;
+  }
+  @media (max-width: 620px) { .dated li { grid-template-columns: 1fr; gap: 2px; } }
+  .dated .when {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  ul.plain { margin: 0; padding-left: 1.2em; }
+  ul.plain li { margin-bottom: 6px; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 24px 20px 40px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <aside class="sidebar">
+    <img class="avatar" src="images/photo.jpg" alt="Photo of Yang Tian">
+    <h1>Yang Tian (田阳)</h1>
+    <p class="role">Ph.D. Candidate</p>
+    <p class="affil"><a href="https://www.sdu.edu.cn/">Shandong University</a> · Jinan, China</p>
+    <div class="links">
+      <div><span class="ico">📧</span><a href="mailto:tianyangchn@gmail.com">tianyangchn@gmail.com</a></div>
+      <div><span class="ico">🐙</span><a href="https://github.com/TyangJN">github.com/TyangJN</a></div>
+      <div><span class="ico">🎓</span><a href="https://scholar.google.com/citations?user=4n4O7YAAAAAJ">Google Scholar</a></div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="about">
+      <h2>Hi, I am Yang Tian (田阳) 👋</h2>
+      <p>I am a Ph.D. candidate in Artificial Intelligence at Shandong University, advised by
+        Prof. <a href="https://liqiangnie.github.io/">Liqiang Nie</a>. Before that, I received my M.Sc. in
+        Computer Science from the University of Augsburg, Germany, advised by
+        Prof. <a href="https://www.schuller.one/">Björn Schuller</a>, and my B.Eng. in Software Engineering
+        from Nanjing University of Aeronautics and Astronautics.
+        Previously, I was an algorithm intern at the Large Language Model Center of Kuaishou Technology
+        (2024.09 – 2026.05).</p>
+      <p>My research interests mainly focus on <b>Multimodal Retrieval Agents</b> (context management and
+        long-horizon interaction), <b>Multimodal Retrieval-Augmented Generation (RAG)</b>, and billion-scale
+        <b>Approximate Nearest Neighbor Search (ANNS)</b>.</p>
+    </section>
+
+    <section>
+      <h2>🔥 News</h2>
+      <ul class="news">
+        <li><span class="date">2026.07.10</span><span>🎉🎉 Two papers are accepted by <b>ACM MM 2026</b> (MM-ContextFold as <b>Oral</b>, FIG as Poster)!</span></li>
+        <li><span class="date">2025.06.16</span><span>🙋 I was accepted as a student volunteer for ACL 2025.</span></li>
+        <li><span class="date">2025.05</span><span>🎉 One paper (CoRe-MMRAG) is accepted by <b>ACL 2025 Main</b>!</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📝 Publications</h2>
+
+      <article class="pub">
+        <img class="teaser-img" src="images/mm-contextfold.jpg" alt="Overview of the MM-ContextFold framework">
+        <div>
+          <span class="venue">ACM MM 2026</span> <span class="venue oral">Oral</span>
+          <h3>MM-ContextFold: Context Folding for Multimodal Agentic Retrieval</h3>
+          <p class="authors"><b>Yang Tian</b>, Fan Liu, Jingyuan Zhang, Zhenyang Li, Yupeng Hu, Liqiang Nie</p>
+          <p class="plinks">[<a href="https://doi.org/10.1145/3767308.3836039">Paper</a>] [<a href="https://github.com/iLearn-Lab/MM26-MMContextFold">Code</a>]</p>
+          <details>
+            <summary>Abstract</summary>
+            <p>Multimodal Agentic Retrieval (MAR) requires agents to iteratively invoke search tools over
+              multimodal inputs across extended tool-use trajectories. Prevailing frameworks such as ReAct append
+              raw input images and full interaction histories to a single ever-growing context, causing context
+              saturation. Through a systematic empirical study over ~10,000 retrieval trajectories, we find that
+              the agent's reliance on raw images progressively diminishes as visual cues are textualized into the
+              evolving context, while continued image retention brings redundant visual context and neutral or
+              worse accuracy. Motivated by these findings, we propose MM-ContextFold, a training-free dual-state
+              framework that decouples visual grounding from the main reasoning trajectory: a persistent text-only
+              main context handles high-level planning, while ephemeral branch contexts load only the designated
+              raw images for scoped visual grounding; each branch folds its findings back into the main context as
+              a textual summary, after which the raw images are discarded. Across seven MAR benchmarks and five
+              backbones, MM-ContextFold improves average accuracy by 6.3% over ReAct while reducing working
+              context length by 27.5%.</p>
+          </details>
+        </div>
+      </article>
+
+      <article class="pub">
+        <img class="teaser-img" src="images/fig.jpg" alt="Overview of the FIG framework">
+        <div>
+          <span class="venue">ACM MM 2026</span>
+          <h3>Open Multimodal Retrieval-Augmented Factual Image Generation</h3>
+          <p class="authors"><b>Yang Tian</b>, Fan Liu, Jingyuan Zhang, Wei Bi, Yupeng Hu, Liqiang Nie</p>
+          <p class="plinks">[<a href="https://doi.org/10.1145/3767308.3835240">Paper</a>] [<a href="https://github.com/iLearn-Lab/MM26-FIG">Code</a>] [<a href="https://huggingface.co/datasets/TyangJN/FIG">Dataset</a>]</p>
+          <details>
+            <summary>Abstract</summary>
+            <p>Large Multimodal Models generate photorealistic and prompt-aligned images, but often produce
+              outputs that contradict verifiable knowledge, especially when prompts involve fine-grained
+              attributes or time-sensitive events. We formalize Factual Image Generation (FIG), an open-world
+              generation task where the input prompt specifies only a coarse intent while many image-critical
+              facts remain implicit and must be inferred and grounded in verifiable real-world knowledge,
+              characterized along three dimensions: perceptual fidelity, compositional consistency, and temporal
+              consistency. We propose an agentic open multimodal retrieval-augmented framework for image
+              generation that iteratively plans sub-queries, retrieves modality-specific evidence from the open
+              web, filters it through sufficiency evaluation and cross-modal filtering, and incrementally
+              distills the refined knowledge into enriched prompts. To support systematic evaluation, we build
+              FIG-Eval, a benchmark of 514 knowledge-intensive prompts spanning ten entity classes with 4,093
+              human-annotated question-answering items. Experiments show that our framework substantially
+              improves factual consistency and overall image quality over strong baselines.</p>
+          </details>
+        </div>
+      </article>
+
+      <article class="pub">
+        <img class="teaser-img" src="images/core-mmrag.jpg" alt="Overview of the CoRe-MMRAG framework">
+        <div>
+          <span class="venue">ACL 2025 Main</span>
+          <h3>CoRe-MMRAG: Cross-Source Knowledge Reconciliation for Multimodal RAG</h3>
+          <p class="authors"><b>Yang Tian</b>, Fan Liu, Jingyuan Zhang, Victoria W., Yupeng Hu, Liqiang Nie</p>
+          <p class="plinks">[<a href="https://arxiv.org/abs/2506.02544">Paper</a>] [<a href="https://github.com/iLearn-Lab/ACL25-COREMMRAG">Code</a>]</p>
+          <details>
+            <summary>Abstract</summary>
+            <p>Multimodal Retrieval-Augmented Generation (MMRAG) has been introduced to enhance Multimodal Large
+              Language Models by incorporating externally retrieved multimodal knowledge, but it introduces two
+              challenges: Parametric-Retrieved Knowledge Inconsistency (PRKI), where discrepancies between
+              parametric and retrieved knowledge create uncertainty in determining reliability, and
+              Visual-Textual Knowledge Inconsistency (VTKI), where misalignment between visual and textual
+              sources disrupts entity representation. To address these challenges, we propose Cross-source
+              knowledge Reconciliation for Multimodal RAG (CoRe-MMRAG), a novel end-to-end framework that
+              effectively reconciles inconsistencies across knowledge sources. CoRe-MMRAG follows a four-stage
+              pipeline: it first generates an internal response from parametric knowledge, then selects the most
+              relevant multimodal evidence via joint similarity assessment, generates an external response, and
+              finally integrates both to produce a reliable answer. Additionally, a specialized training paradigm
+              enhances knowledge source discrimination, multimodal integration, and unified answer generation.
+              Experiments on KB-VQA benchmarks show that CoRe-MMRAG achieves substantial improvements over
+              baseline methods, achieving 5.6% and 9.3% performance gains on InfoSeek and Encyclopedic-VQA,
+              respectively.</p>
+          </details>
+        </div>
+      </article>
+
+      <article class="pub">
+        <img class="teaser-img" src="images/webtestbench.jpg" alt="WebTestBench data construction pipeline">
+        <div>
+          <span class="venue preprint">Preprint</span>
+          <h3>WebTestBench: Evaluating Computer-Use Agents towards End-to-End Automated Web Testing</h3>
+          <p class="authors">Fanheng Kong, Jingyuan Zhang, Yang Yue, Chenxi Sun, <b>Yang Tian</b>, Shi Feng,
+            Xiaocui Yang, Daling Wang, Yu Tian, Jun Du, Wenchong Zeng, Han Li, Kun Gai</p>
+          <p class="plinks">[<a href="https://arxiv.org/abs/2603.25226">Paper</a>] [<a href="https://github.com/friedrichor/WebTestBench">Code</a>]</p>
+          <details>
+            <summary>Abstract</summary>
+            <p>The emergence of Large Language Models (LLMs) has catalyzed a paradigm shift in programming,
+              giving rise to "vibe coding", where users can build complete projects and even control computers
+              using natural language instructions. This paradigm has driven automated webpage development, but it
+              introduces a new requirement about how to automatically verify whether the web functionalities are
+              reliably implemented. Existing works struggle to adapt, relying on static visual similarity or
+              predefined checklists that constrain their utility in open-ended environments. Furthermore, they
+              overlook a vital aspect of software quality, namely latent logical constraints. To address these
+              gaps, we introduce WebTestBench, a benchmark for evaluating end-to-end automated web testing.
+              WebTestBench encompasses comprehensive dimensions across diverse web application categories. We
+              decompose the testing process into two cascaded sub-tasks, checklist generation and defect
+              detection, and propose WebTester, a baseline framework for this task. Evaluating popular LLMs with
+              WebTester reveals severe challenges, including insufficient test completeness, detection
+              bottlenecks, and long-horizon interaction unreliability. These findings expose a substantial gap
+              between current computer-use agent capabilities and industrial-grade deployment demands. We hope
+              that WebTestBench provides valuable insights and guidance for advancing end-to-end automated web
+              testing.</p>
+          </details>
+        </div>
+      </article>
+
+      <p class="subhead">Technical Report</p>
+      <article class="pub">
+        <img class="teaser-img" src="images/keye-vl.jpg" alt="Keye-VL-2.0-30B-A3B performance on video understanding benchmarks">
+        <div>
+          <span class="venue preprint">Tech Report</span>
+          <h3>Kwai Keye-VL-2.0 Technical Report</h3>
+          <p class="authors">Kwai Keye Team (incl. <b>Yang Tian</b>)</p>
+          <p class="plinks">[<a href="https://arxiv.org/abs/2606.10651">Paper</a>] [<a href="https://github.com/Kwai-Keye/Keye">Code</a>]</p>
+          <details>
+            <summary>Abstract</summary>
+            <p>We introduce Kwai Keye-VL-2.0-30B-A3B, an open-source Mixture-of-Experts (MoE) multimodal
+              foundation model designed to advance long-video understanding and agentic intelligence. To address
+              the challenges of ultra-long contexts, information redundancy, and prohibitive computational costs
+              inherent in hour-level videos, Keye-VL-2.0 is the first to adapt DeepSeek Sparse Attention (DSA) to
+              GQA-based multimodal architectures, enabling lossless 256K context processing while capturing
+              critical frames and long-range temporal dependencies. This architecture is underpinned by a highly
+              optimized training and inference infrastructure, including scalable video I/O, heterogeneous ViT-LM
+              parallelism, and custom DSA kernels that significantly maximize throughput and minimize
+              computational overhead. Furthermore, to overcome the algorithmic dilemma of catastrophic forgetting
+              during multi-task alignment, we introduce Cross-Modal Multi-Teacher On-Policy Distillation (MOPD)
+              paired with Context-RL and Video-RL. By distilling dense token-level teacher feedback from
+              on-policy rollouts back into the MoE backbone, which activates only 3B parameters, Keye-VL-2.0
+              natively empowers advanced agent collaboration across Code, Tool, and Search scenarios with
+              multimodal self-correction. Extensive evaluations across video understanding, temporal grounding,
+              reasoning, STEM, and agent benchmarks demonstrate that Keye-VL-2.0-30B-A3B achieves
+              state-of-the-art performance among models of similar scale, particularly excelling in fine-grained
+              temporal localization on TimeLens and long-video comprehension on Video-MME-v2 and LongVideoBench.
+              We release our model checkpoints to accelerate community progress toward scalable and robust
+              multimodal agentic applications.</p>
+          </details>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>💻 Open Science</h2>
+      <ul class="plain">
+        <li><b>MM-ContextFold</b> · ACM MM 2026 (Oral) — [<a href="https://github.com/iLearn-Lab/MM26-MMContextFold">Code</a>]</li>
+        <li><b>FIG</b> · ACM MM 2026 — [<a href="https://github.com/iLearn-Lab/MM26-FIG">Code</a>] [<a href="https://huggingface.co/datasets/TyangJN/FIG">FIG Dataset 🤗</a>]</li>
+        <li><b>CoRe-MMRAG</b> · ACL 2025 — [<a href="https://github.com/iLearn-Lab/ACL25-COREMMRAG">Code</a>]</li>
+        <li>Lab organization: <a href="https://github.com/iLearn-Lab">github.com/iLearn-Lab</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🏭 Industry Project</h2>
+      <div class="industry">
+        <h3>SDU–Huawei Collaboration: Large-Scale Vector Retrieval (ANNS)</h3>
+        <div class="chips">
+          <span class="chip">🌟 Huawei Excellent Technical Cooperation Project Award (2023, project member)</span>
+          <span class="chip">🏆 QSNGT: leading performance on 5 international benchmarks</span>
+        </div>
+        <div class="irow">
+          <img class="teaser-img" src="images/ann-benchmarks.jpg" alt="QSGNGT on the ANN-Benchmarks Recall-QPS evaluation">
+          <div>
+            <p>As a member of the SDU–Huawei vector retrieval collaboration (2022.07 – 2024.08), I co-proposed
+              <b>QSNGT</b>, a graph-tree-based vector retrieval algorithm with improved edge-selection and
+              index-construction strategies, achieving leading performance on five international benchmark
+              datasets. I also designed a billion-scale inverted-index construction algorithm that improves
+              construction efficiency by over 50% without loss of retrieval performance, and a locality-sensitive
+              graph index for streaming search that improves retrieval performance by over 10% on four
+              billion-scale datasets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🔖 Patents</h2>
+      <ul class="plain">
+        <li>[Granted 2025.01] Image-Text Retrieval Method and System Based on Cross-Modal Semantic
+          Parsing（基于跨模态语义解析的图文检索方法及系统）— Application No. 2024103264429
+          [<a href="https://zbgx.sdips.com.cn/Web/PomDisplay.aspx?Id=1398b1d7-3ba6-4037-9e14-70c538f5407c">Link</a>]</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🎖 Honors and Awards</h2>
+      <ul class="dated">
+        <li><span class="when">2025.06</span><span>Student Volunteer, ACL 2025</span></li>
+        <li><span class="when">2025.01</span><span>First-class Academic Scholarship, Shandong University</span></li>
+        <li><span class="when">2024.01</span><span>Second-class Academic Scholarship, Shandong University</span></li>
+        <li><span class="when">2023</span><span>Huawei Excellent Technical Cooperation Project Award (project member)</span></li>
+        <li><span class="when">2015.01</span><span>Second-class Academic Scholarship, Nanjing University of Aeronautics and Astronautics</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>💼 Experience</h2>
+      <ul class="dated">
+        <li><span class="when">2024.09 – 2026.05</span><span><b>Algorithm Intern</b>, Large Language Model Center, Kuaishou Technology — multimodal agent training and retrieval-augmented generation</span></li>
+        <li><span class="when">2021.12 – 2022.05</span><span><b>R&amp;D Engineer</b>, Inspur Academy of Science and Technology — low-power ML algorithms on edge devices</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📖 Education</h2>
+      <ul class="dated">
+        <li><span class="when">2022.09 – 2026.12</span><span><b>Ph.D.</b> in Artificial Intelligence, Shandong University (expected)</span></li>
+        <li><span class="when">2017.09 – 2021.09</span><span><b>M.Sc.</b> in Computer Science, University of Augsburg, Germany</span></li>
+        <li><span class="when">2016.03 – 2017.06</span><span>Preparatory Program (Studienkolleg), Otto von Guericke University Magdeburg, Germany</span></li>
+        <li><span class="when">2011.09 – 2015.06</span><span><b>B.Eng.</b> in Software Engineering, Nanjing University of Aeronautics and Astronautics</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📃 Academic Services</h2>
+      <ul class="plain">
+        <li><b>Journal Reviewer</b>: IEEE TMM, IEEE TKDE, IEEE TIP, IEEE TCSVT, ACM TOIS</li>
+        <li><b>Conference Reviewer</b>: AAAI, ACM MM, ACL, CVPR</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<footer>© 2026 Yang Tian · <a href="https://tyangjn.github.io/">tyangjn.github.io</a> · Last updated 2026.08</footer>
+
+</body>
+</html>
